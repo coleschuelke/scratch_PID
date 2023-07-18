@@ -21,6 +21,7 @@ class PID:
         self.errSum = 0
         self.lastErr = 0
         self.lastTime = time.time()
+        # self.sampleTime = 0.01 # sample time in sec
         
     def Compute(self):
         # compute the PID output
@@ -28,11 +29,15 @@ class PID:
         # find the loop time
         self.now = time.time()
         dt = self.now - self.lastTime
+        print(dt)
+
+        # evaluate at regular intervals
+        #if dt >= self.sampleTime:
         
         # compute error variables
         self.error = self.setpoint - self.input
-        self.errSum += self.error*dt
-        self.dErr = (self.error - self.lastErr)/dt
+        self.errSum += self.error *dt
+        self.dErr = (self.error - self.lastErr) /dt
         
         
         # compute the output
@@ -45,5 +50,13 @@ class PID:
     def SetTunings(self, kp, ki, kd):
         # adjusts the tunings
         self.kp = kp
-        self.ki = ki 
-        self.kd = kd
+        self.ki = ki #* self.sampleTime
+        self.kd = kd #/ self.sampleTime
+
+    # def SetSampleTime(self, newSampleTime):
+    #     if newSampleTime > 0:
+    #         ratio = newSampleTime / self.sampleTime
+
+    #     self.ki *= ratio 
+    #     self.kd /= ratio
+    #     self.sampleTime = newSampleTime

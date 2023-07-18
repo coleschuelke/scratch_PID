@@ -46,6 +46,9 @@ for i in range(5000):
         n = 0
         observation, info = env.reset()
         time.sleep(0.5)
+
+    if i == 4999:
+        print(n, ' steps', cont.errSum, ' error sum')
     
     
         
